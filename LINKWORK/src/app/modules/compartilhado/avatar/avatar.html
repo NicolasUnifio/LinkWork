@@ -1,0 +1,7 @@
+<span class="avatar" [style.width.px]="tamanho" [style.height.px]="tamanho" [style.font-size.px]="tamanho * 0.42">
+  @if (foto) {
+    <img [src]="foto" [alt]="'Foto de ' + nome">
+  } @else {
+    <span aria-hidden="true">{{ inicial }}</span>
+  }
+</span>

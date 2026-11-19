@@ -1,0 +1,26 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.container {
+  flex: 1;
+}
+
+mat-sidenav {
+  width: 240px;
+  background: var(--lw-surf);
+  border-right: 1px solid var(--lw-line);
+  padding: 12px 8px;
+}
+
+mat-nav-list a {
+  border-radius: 12px;
+  margin-bottom: 4px;
+}
+
+.ativo {
+  background: var(--lw-soft);
+  color: var(--lw-acc);
+}

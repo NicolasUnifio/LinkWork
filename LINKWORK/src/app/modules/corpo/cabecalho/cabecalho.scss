@@ -1,0 +1,37 @@
+:host {
+  display: block;
+  position: relative;
+  z-index: 2;
+}
+
+mat-toolbar {
+  border-bottom: 1px solid var(--lw-line);
+  gap: 8px;
+}
+
+.espaco {
+  flex: 1;
+}
+
+.usuario {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-right: 8px;
+}
+
+.dados {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+
+  small {
+    color: var(--lw-mute);
+  }
+}
+
+@media (max-width: 600px) {
+  .dados {
+    display: none;
+  }
+}

@@ -1,0 +1,16 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.elo-azul { stroke: var(--lw-acc); }
+.elo-escuro { stroke: var(--lw-ink); }
+
+.nome {
+  font-family: var(--lw-fonte-titulo);
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: -0.5px;
+  color: var(--lw-ink);
+}

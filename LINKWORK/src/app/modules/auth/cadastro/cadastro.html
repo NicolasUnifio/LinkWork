@@ -1,0 +1,72 @@
+<main class="pagina">
+  <div class="marca">
+    <app-logo [tamanho]="40" />
+    <p>Conecte freelancers e empresas com segurança</p>
+  </div>
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Criar conta</mat-card-title>
+      <mat-card-subtitle>Escolha se você é freelancer ou empresa</mat-card-subtitle>
+    </mat-card-header>
+
+    <form #form="ngForm" (ngSubmit)="cadastrar()" novalidate>
+      <mat-card-content class="coluna">
+        <mat-form-field appearance="outline">
+          <mat-label>Perfil</mat-label>
+          <mat-select name="perfil" required [(ngModel)]="perfil">
+            <mat-option value="FREELANCER">Freelancer</mat-option>
+            <mat-option value="EMPRESA">Empresa ou pessoa física contratante</mat-option>
+          </mat-select>
+          <mat-error>Escolha um perfil</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Nome</mat-label>
+          <input matInput name="nome" required [(ngModel)]="nome">
+          <mat-error>Informe o nome</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>E-mail</mat-label>
+          <input matInput type="email" name="email" required email
+                 autocomplete="email" #emailCtrl="ngModel" [(ngModel)]="email">
+          @if (emailCtrl.hasError('required')) {
+            <mat-error>Informe o e-mail</mat-error>
+          } @else if (emailCtrl.hasError('email')) {
+            <mat-error>Informe um e-mail válido</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Senha</mat-label>
+          <input matInput type="password" name="senha" required minlength="6"
+                 autocomplete="new-password" #senhaCtrl="ngModel" [(ngModel)]="senha">
+          @if (senhaCtrl.hasError('required')) {
+            <mat-error>Informe a senha</mat-error>
+          } @else if (senhaCtrl.hasError('minlength')) {
+            <mat-error>A senha precisa ter pelo menos 6 caracteres</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Área de atuação</mat-label>
+          <mat-select name="area" required [(ngModel)]="area">
+            @for (a of areas; track a) {
+              <mat-option [value]="a">{{ a }}</mat-option>
+            }
+          </mat-select>
+          <mat-error>Escolha uma área</mat-error>
+        </mat-form-field>
+
+        @if (mensagem) {
+          <p class="mensagem-erro" role="alert">{{ mensagem }}</p>
+        }
+      </mat-card-content>
+
+      <mat-card-actions class="acoes">
+        <a mat-button routerLink="/auth/login">Já tenho conta</a>
+        <button mat-flat-button type="submit" [disabled]="form.invalid">Cadastrar</button>
+      </mat-card-actions>
+    </form>
+  </mat-card>
+</main>

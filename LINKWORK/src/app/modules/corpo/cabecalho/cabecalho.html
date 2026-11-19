@@ -1,0 +1,20 @@
+<mat-toolbar>
+  @if (logado) {
+    <button mat-icon-button type="button" aria-label="Abrir ou fechar menu" (click)="alternar.emit()">
+      <mat-icon fontSet="material-symbols-outlined">menu</mat-icon>
+    </button>
+  }
+  <app-logo />
+  <span class="espaco"></span>
+
+  @if (auth.usuario) {
+    <span class="usuario">
+      <app-avatar [nome]="auth.usuario.nome" [foto]="auth.usuario.foto" [tamanho]="36" />
+      <span class="dados">
+        <strong>{{ auth.usuario.nome }}</strong>
+        <small>{{ auth.usuario.perfil === 'EMPRESA' ? 'Empresa' : 'Freelancer' }}</small>
+      </span>
+    </span>
+    <button mat-stroked-button type="button" (click)="sair()">Sair</button>
+  }
+</mat-toolbar>

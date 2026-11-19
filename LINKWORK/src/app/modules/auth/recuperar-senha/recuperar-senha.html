@@ -1,0 +1,50 @@
+<main class="pagina">
+  <div class="marca">
+    <app-logo [tamanho]="40" />
+    <p>Conecte freelancers e empresas com segurança</p>
+  </div>
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Redefinir senha</mat-card-title>
+      <mat-card-subtitle>Informe seu e-mail e a nova senha</mat-card-subtitle>
+    </mat-card-header>
+
+    <form #form="ngForm" (ngSubmit)="redefinir()" novalidate>
+      <mat-card-content class="coluna">
+        <mat-form-field appearance="outline">
+          <mat-label>E-mail</mat-label>
+          <input matInput type="email" name="email" required email
+                 #emailCtrl="ngModel" [(ngModel)]="email">
+          @if (emailCtrl.hasError('required')) {
+            <mat-error>Informe o e-mail</mat-error>
+          } @else if (emailCtrl.hasError('email')) {
+            <mat-error>Informe um e-mail válido</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Nova senha</mat-label>
+          <input matInput type="password" name="novaSenha" required minlength="6"
+                 autocomplete="new-password" #senhaCtrl="ngModel" [(ngModel)]="novaSenha">
+          @if (senhaCtrl.hasError('required')) {
+            <mat-error>Informe a nova senha</mat-error>
+          } @else if (senhaCtrl.hasError('minlength')) {
+            <mat-error>A senha precisa ter pelo menos 6 caracteres</mat-error>
+          }
+        </mat-form-field>
+
+        @if (erro) {
+          <p class="mensagem-erro" role="alert">{{ erro }}</p>
+        }
+        @if (sucesso) {
+          <p class="mensagem-ok" role="status">Senha redefinida. Já é possível entrar.</p>
+        }
+      </mat-card-content>
+
+      <mat-card-actions class="acoes">
+        <a mat-button routerLink="/auth/login">Voltar ao login</a>
+        <button mat-flat-button type="submit" [disabled]="form.invalid">Redefinir</button>
+      </mat-card-actions>
+    </form>
+  </mat-card>
+</main>

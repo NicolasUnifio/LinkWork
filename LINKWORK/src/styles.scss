@@ -1,0 +1,188 @@
+@use '@angular/material' as mat;
+
+// ================== Identidade visual do LinkWork ==================
+// Mesmas cores e fontes do protótipo apresentado.
+:root {
+  --lw-bg: #f2f5fa;
+  --lw-surf: #ffffff;
+  --lw-ink: #14213d;
+  --lw-mute: #5b6785;
+  --lw-line: #dce3ef;
+  --lw-acc: #2447f5;
+  --lw-soft: #e6ecff;
+  --lw-ok: #12805c;
+  --lw-warn: #b25e09;
+  --lw-fonte-titulo: 'Bricolage Grotesque', 'Figtree', system-ui, sans-serif;
+  --lw-fonte-corpo: 'Figtree', 'Roboto', system-ui, sans-serif;
+}
+
+html {
+  height: 100%;
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$azure-palette,
+        tertiary: mat.$blue-palette,
+      ),
+      typography: (
+        plain-family: 'Figtree, Roboto, system-ui, sans-serif',
+        brand-family: 'Bricolage Grotesque, Figtree, system-ui, sans-serif',
+        bold-weight: 700,
+        medium-weight: 600,
+        regular-weight: 400,
+      ),
+      density: 0,
+    )
+  );
+
+  // Paleta do LinkWork sobre o Material 3
+  --mat-sys-primary: var(--lw-acc);
+  --mat-sys-on-primary: #ffffff;
+  --mat-sys-primary-container: var(--lw-soft);
+  --mat-sys-on-primary-container: var(--lw-ink);
+  --mat-sys-secondary-container: var(--lw-soft);
+  --mat-sys-on-secondary-container: var(--lw-acc);
+  --mat-sys-surface: var(--lw-bg);
+  --mat-sys-surface-container-lowest: var(--lw-surf);
+  --mat-sys-surface-container-low: var(--lw-surf);
+  --mat-sys-surface-container: var(--lw-surf);
+  --mat-sys-surface-container-high: var(--lw-surf);
+  --mat-sys-surface-container-highest: var(--lw-soft);
+  --mat-sys-on-surface: var(--lw-ink);
+  --mat-sys-on-surface-variant: var(--lw-mute);
+  --mat-sys-outline: #9aa6c6;
+  --mat-sys-outline-variant: var(--lw-line);
+
+  // Cartões e barra superior
+  --mat-card-outlined-container-color: var(--lw-surf);
+  --mat-card-outlined-container-shape: 16px;
+  --mat-card-outlined-outline-color: var(--lw-line);
+  --mat-toolbar-container-background-color: var(--lw-surf);
+  --mat-toolbar-container-text-color: var(--lw-ink);
+  --mat-sidenav-container-background-color: transparent;
+  --mat-sidenav-container-shape: 0;
+  --mat-table-background-color: transparent;
+}
+
+body {
+  color-scheme: light;
+  background-color: var(--lw-bg);
+  color: var(--lw-ink);
+  font-family: var(--lw-fonte-corpo);
+  font-size: 15px;
+  margin: 0;
+  height: 100%;
+}
+
+h1, h2, h3 {
+  font-family: var(--lw-fonte-titulo);
+  letter-spacing: -0.5px;
+  line-height: 1.15;
+  margin: 0 0 8px;
+}
+
+h1 { font-size: 30px; font-weight: 800; }
+
+// ---- Layout global das páginas (o CSS dos componentes cuida só do que é local) ----
+.pagina,
+.pagina-media,
+.pagina-larga {
+  margin: 24px auto;
+  padding: 0 16px 32px;
+  box-sizing: border-box;
+}
+
+.pagina { max-width: 440px; }
+.pagina-media { max-width: 720px; }
+.pagina-larga { max-width: 1100px; }
+
+.coluna {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 16px;
+}
+
+.linha {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+  padding: 16px;
+}
+
+.topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.mensagem-erro { color: var(--mat-sys-error); margin: 0; }
+.mensagem-ok { color: var(--lw-ok); margin: 0; }
+.secundario { color: var(--lw-mute); }
+
+mat-card + mat-card { margin-top: 16px; }
+mat-form-field { width: 100%; }
+
+mat-card-title {
+  font-family: var(--lw-fonte-titulo);
+  font-weight: 800;
+}
+
+// Marca acima dos formulários de acesso
+.marca {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 20px;
+  text-align: center;
+
+  p { margin: 0; color: var(--lw-mute); }
+}
+
+// Selos de status (lista e detalhe)
+.selo {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  background: var(--lw-soft);
+  color: var(--lw-acc);
+}
+
+.selo-AGUARDANDO_PAGAMENTO { background: #fdf0dd; color: var(--lw-warn); }
+.selo-EM_ANDAMENTO { background: #dcebff; color: #124e9c; }
+.selo-ENTREGUE { background: #efe6ff; color: #5b2bb5; }
+.selo-CONCLUIDO { background: #ddf3ea; color: var(--lw-ok); }
+
+// Perfis (usados na rede, no perfil e no detalhe do projeto)
+.habilidade {
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--lw-line);
+  background: var(--lw-surf);
+  font-size: 13px;
+}
+
+.link {
+  color: var(--lw-acc);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}

@@ -1,0 +1,41 @@
+<app-cabecalho [logado]="auth.usuario !== null" (alternar)="gaveta.toggle()" />
+
+<mat-sidenav-container class="container">
+  <mat-sidenav
+    #gaveta
+    [mode]="movel ? 'over' : 'side'"
+    [opened]="auth.usuario !== null && !movel"
+    (click)="movel && gaveta.close()"
+  >
+    <mat-nav-list>
+      <a mat-list-item routerLink="/dashboard" routerLinkActive="ativo">
+        <mat-icon matListItemIcon fontSet="material-symbols-outlined">dashboard</mat-icon>
+        <span matListItemTitle>Início</span>
+      </a>
+      <a mat-list-item routerLink="/projetos" routerLinkActive="ativo" [routerLinkActiveOptions]="{ exact: true }">
+        <mat-icon matListItemIcon fontSet="material-symbols-outlined">work</mat-icon>
+        <span matListItemTitle>Projetos</span>
+      </a>
+      @if (auth.usuario?.perfil === 'EMPRESA') {
+        <a mat-list-item routerLink="/projetos/novo" routerLinkActive="ativo">
+          <mat-icon matListItemIcon fontSet="material-symbols-outlined">add_circle</mat-icon>
+          <span matListItemTitle>Novo projeto</span>
+        </a>
+      }
+      <a mat-list-item routerLink="/perfil" routerLinkActive="ativo" [routerLinkActiveOptions]="{ exact: true }">
+        <mat-icon matListItemIcon fontSet="material-symbols-outlined">groups</mat-icon>
+        <span matListItemTitle>Rede</span>
+      </a>
+      @if (auth.usuario) {
+        <a mat-list-item [routerLink]="['/perfil', auth.usuario.id]" routerLinkActive="ativo">
+          <mat-icon matListItemIcon fontSet="material-symbols-outlined">person</mat-icon>
+          <span matListItemTitle>Meu perfil</span>
+        </a>
+      }
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <router-outlet />
+  </mat-sidenav-content>
+</mat-sidenav-container>
