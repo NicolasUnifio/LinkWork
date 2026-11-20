@@ -1,3 +1,4 @@
+// Guarda as listas no navegador (localStorage) enquanto não existe back-end.
 
 export function ler<T>(chave: string): T[] {
   const texto = localStorage.getItem('linkwork:' + chave);

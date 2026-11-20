@@ -7,13 +7,13 @@ export interface Usuario {
   senha: string;
   perfil: Perfil;
   area: string;
- 
+  // dados opcionais do perfil (editáveis pelo próprio usuário)
   titulo?: string;
   localizacao?: string;
   resumo?: string;
-  habilidades?: string; 
+  habilidades?: string; // separadas por vírgula
   site?: string;
-  foto?: string; 
+  foto?: string; // imagem em texto (data URL), já reduzida
 }
 
 export type StatusProjeto =
@@ -29,7 +29,7 @@ export interface Projeto {
   descricao: string;
   area: string;
   orcamento: number;
-  prazo: string; 
+  prazo: string; // yyyy-MM-dd
   status: StatusProjeto;
   empresaId: number;
   freelancerId?: number;

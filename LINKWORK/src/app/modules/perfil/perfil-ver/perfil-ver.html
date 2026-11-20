@@ -1,0 +1,97 @@
+@if (pessoa) {
+  <main class="pagina-media">
+    <mat-card appearance="outlined">
+      <mat-card-content>
+        <section class="cabecalho-perfil">
+          <app-avatar [nome]="pessoa.nome" [foto]="pessoa.foto" [tamanho]="88" />
+          <div class="identidade">
+            <h1>{{ pessoa.nome }}</h1>
+            @if (pessoa.titulo) {
+              <p class="titulo">{{ pessoa.titulo }}</p>
+            }
+            <p class="secundario">
+              {{ pessoa.perfil === 'EMPRESA' ? 'Empresa' : 'Freelancer' }} · {{ pessoa.area }}
+              @if (pessoa.localizacao) {
+                · {{ pessoa.localizacao }}
+              }
+            </p>
+          </div>
+          @if (ehMeuPerfil) {
+            <a mat-stroked-button routerLink="/perfil/editar">
+              <mat-icon fontSet="material-symbols-outlined">edit</mat-icon>
+              Editar perfil
+            </a>
+          }
+        </section>
+
+        <section class="numeros">
+          <div>
+            <strong>{{ media === null ? '—' : media.toFixed(1) }}</strong>
+            <span>Média das avaliações</span>
+          </div>
+          <div>
+            <strong>{{ recebidas.length }}</strong>
+            <span>Avaliações recebidas</span>
+          </div>
+          <div>
+            <strong>{{ concluidos }}</strong>
+            <span>Projetos concluídos</span>
+          </div>
+        </section>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>Sobre</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        @if (pessoa.resumo) {
+          <p class="texto">{{ pessoa.resumo }}</p>
+        } @else {
+          <p class="secundario">
+            {{ ehMeuPerfil ? 'Você ainda não escreveu nada aqui. Edite seu perfil para se apresentar.' : 'Esta pessoa ainda não preencheu o perfil.' }}
+          </p>
+        }
+
+        @if (habilidades.length > 0) {
+          <h3>{{ pessoa.perfil === 'EMPRESA' ? 'Serviços que costuma contratar' : 'Habilidades' }}</h3>
+          <div class="habilidades">
+            @for (h of habilidades; track h) {
+              <span class="habilidade">{{ h }}</span>
+            }
+          </div>
+        }
+
+        @if (pessoa.site) {
+          <h3>{{ pessoa.perfil === 'EMPRESA' ? 'Site' : 'Portfólio' }}</h3>
+          <a class="link" [href]="pessoa.site" target="_blank" rel="noopener noreferrer">{{ pessoa.site }}</a>
+        }
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>Avaliações</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        @for (a of recebidas; track a.id) {
+          <div class="avaliacao">
+            <span class="estrelas" [attr.aria-label]="'Nota ' + a.nota + ' de 5'">{{ estrelas(a.nota) }}</span>
+            <strong>{{ nomeDe(a.avaliadorId) }}</strong>
+            @if (a.comentario) {
+              <p>{{ a.comentario }}</p>
+            }
+          </div>
+          <mat-divider />
+        } @empty {
+          <p class="secundario">Ainda não há avaliações.</p>
+        }
+      </mat-card-content>
+    </mat-card>
+
+    <div class="acoes">
+      <a mat-button routerLink="/perfil">Voltar para a rede</a>
+    </div>
+  </main>
+}

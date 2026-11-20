@@ -1,0 +1,49 @@
+.filtros {
+  align-items: center;
+  padding-top: 16px;
+
+  mat-form-field {
+    flex: 1 1 200px;
+    width: auto;
+  }
+}
+
+.grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+mat-card + mat-card {
+  margin-top: 0;
+}
+
+.topo-cartao {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  p {
+    margin: 0;
+  }
+}
+
+.titulo {
+  margin: 12px 0 2px;
+  font-weight: 600;
+}
+
+.habilidades {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.rodape {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px 16px;
+}

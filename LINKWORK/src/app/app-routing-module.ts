@@ -2,12 +2,16 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'auth/login', pathMatch: 'full' },
+  { path: '', redirectTo: 'perfil', pathMatch: 'full' },
   {
     path: 'auth',
     loadChildren: () => import('./modules/auth/auth-module').then((m) => m.AuthModule),
   },
-  { path: '**', redirectTo: 'auth/login' },
+  {
+    path: 'perfil',
+    loadChildren: () => import('./modules/perfil/perfil-module').then((m) => m.PerfilModule),
+  },
+  { path: '**', redirectTo: 'perfil' },
 ];
 
 @NgModule({

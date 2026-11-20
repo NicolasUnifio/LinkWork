@@ -1,0 +1,71 @@
+<main class="pagina-larga">
+  <div class="topo">
+    <h1>Rede</h1>
+  </div>
+  <p class="secundario">Encontre freelancers e empresas e veja o perfil de cada um.</p>
+
+  <mat-card appearance="outlined">
+    <mat-card-content>
+      <div class="linha filtros">
+        <mat-form-field appearance="outline">
+          <mat-label>Buscar</mat-label>
+          <input matInput name="busca" [(ngModel)]="busca" placeholder="Nome, título ou habilidade">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Quem procuro</mat-label>
+          <mat-select name="tipo" [(ngModel)]="tipo">
+            <mat-option value="">Todos</mat-option>
+            <mat-option value="FREELANCER">Freelancers</mat-option>
+            <mat-option value="EMPRESA">Empresas</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Área</mat-label>
+          <mat-select name="area" [(ngModel)]="area">
+            <mat-option value="">Todas</mat-option>
+            @for (a of areas; track a) {
+              <mat-option [value]="a">{{ a }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <button mat-button type="button" (click)="limpar()">Limpar filtros</button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <section class="grade" aria-label="Pessoas">
+    @for (u of filtradas; track u.id) {
+      <mat-card appearance="outlined">
+        <mat-card-content>
+          <div class="topo-cartao">
+            <app-avatar [nome]="u.nome" [foto]="u.foto" [tamanho]="56" />
+            <div>
+              <strong>{{ u.nome }}</strong>
+              <p class="secundario">{{ u.perfil === 'EMPRESA' ? 'Empresa' : 'Freelancer' }} · {{ u.area }}</p>
+            </div>
+          </div>
+          @if (u.titulo) {
+            <p class="titulo">{{ u.titulo }}</p>
+          }
+          @if (u.localizacao) {
+            <p class="secundario">{{ u.localizacao }}</p>
+          }
+          <div class="habilidades">
+            @for (h of habilidadesDe(u); track h) {
+              <span class="habilidade">{{ h }}</span>
+            }
+          </div>
+        </mat-card-content>
+        <mat-card-actions class="rodape">
+          <span class="secundario">{{ mediaDe(u) }}</span>
+          <a mat-stroked-button [routerLink]="['/perfil', u.id]">Ver perfil</a>
+        </mat-card-actions>
+      </mat-card>
+    } @empty {
+      <p class="secundario">Ninguém encontrado com esses filtros.</p>
+    }
+  </section>
+</main>

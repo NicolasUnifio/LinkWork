@@ -1,0 +1,82 @@
+<main class="pagina-media">
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Editar perfil</mat-card-title>
+      <mat-card-subtitle>
+        {{ ehEmpresa ? 'Mostre quem é a sua empresa para os freelancers' : 'Mostre seu trabalho para as empresas' }}
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <form #form="ngForm" (ngSubmit)="salvar()" novalidate>
+      <mat-card-content class="coluna">
+        <section class="foto">
+          <app-avatar [nome]="nome" [foto]="foto" [tamanho]="96" />
+          <div class="foto-acoes">
+            <label class="botao-arquivo" for="arquivo-foto">
+              {{ foto ? 'Trocar foto' : 'Escolher foto' }}
+            </label>
+            <input id="arquivo-foto" class="campo-arquivo" type="file"
+                   accept="image/png, image/jpeg, image/webp" (change)="escolherFoto($event)">
+            @if (foto) {
+              <button mat-button type="button" (click)="removerFoto()">Remover foto</button>
+            }
+          </div>
+        </section>
+        @if (erroFoto) {
+          <p class="mensagem-erro" role="alert">{{ erroFoto }}</p>
+        }
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ ehEmpresa ? 'Nome da empresa' : 'Nome' }}</mat-label>
+          <input matInput name="nome" required maxlength="60" [(ngModel)]="nome">
+          <mat-error>Informe o nome</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ ehEmpresa ? 'Ramo de atuação' : 'Título profissional' }}</mat-label>
+          <input matInput name="titulo" maxlength="80" [(ngModel)]="titulo"
+                 [placeholder]="ehEmpresa ? 'Ex.: Agência de marketing digital' : 'Ex.: Designer gráfico e de marca'">
+        </mat-form-field>
+
+        <div class="linha">
+          <mat-form-field appearance="outline">
+            <mat-label>Área</mat-label>
+            <mat-select name="area" required [(ngModel)]="area">
+              @for (a of areas; track a) {
+                <mat-option [value]="a">{{ a }}</mat-option>
+              }
+            </mat-select>
+            <mat-error>Escolha uma área</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Localização</mat-label>
+            <input matInput name="localizacao" maxlength="60" placeholder="Cidade, UF" [(ngModel)]="localizacao">
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Sobre</mat-label>
+          <textarea matInput name="resumo" rows="5" maxlength="600" [(ngModel)]="resumo"
+                    placeholder="Conte um pouco sobre você ou sobre a empresa"></textarea>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ ehEmpresa ? 'Serviços que costuma contratar' : 'Habilidades' }}</mat-label>
+          <input matInput name="habilidades" maxlength="200" [(ngModel)]="habilidades"
+                 placeholder="Separe por vírgula. Ex.: Logotipo, Identidade visual, Figma">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>{{ ehEmpresa ? 'Site' : 'Portfólio ou site' }}</mat-label>
+          <input matInput type="url" name="site" maxlength="120" [(ngModel)]="site" placeholder="https://">
+        </mat-form-field>
+      </mat-card-content>
+
+      <mat-card-actions class="acoes">
+        <button mat-button type="button" (click)="cancelar()">Cancelar</button>
+        <button mat-flat-button type="submit" [disabled]="form.invalid">Salvar perfil</button>
+      </mat-card-actions>
+    </form>
+  </mat-card>
+</main>

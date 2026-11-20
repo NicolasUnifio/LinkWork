@@ -1,0 +1,43 @@
+// O input de arquivo fica escondido (só para leitores de tela e teclado) e o <label> faz o papel do botão.
+.foto {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+
+.foto-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.campo-arquivo {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.botao-arquivo {
+  display: inline-block;
+  padding: 10px 20px;
+  border: 1px solid var(--lw-acc);
+  border-radius: 999px;
+  color: var(--lw-acc);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.botao-arquivo:hover {
+  background: var(--lw-soft);
+}
+
+// mostra o contorno quando o campo escondido recebe foco pelo teclado
+.campo-arquivo:focus-visible + button,
+.foto-acoes:focus-within .botao-arquivo {
+  outline: 3px solid var(--lw-acc);
+  outline-offset: 2px;
+}

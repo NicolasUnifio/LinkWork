@@ -11,20 +11,20 @@ export class AuthService {
     private router: Router,
     private app: ApplicationRef,
   ) {
-   
+    // Usuários iniciais para testar o sistema.
     if (ler<Usuario>('usuarios').length === 0) {
       this.cadastrarSemEntrar('Studio Aurora', 'empresa@linkwork.com', '123456', 'EMPRESA', 'TI');
       this.cadastrarSemEntrar('Marina Costa', 'freelancer@linkwork.com', '123456', 'FREELANCER', 'Design');
     }
     this.trocarNomesAntigos();
 
-    
+    // A sessão guarda só o id; o usuário é lido de novo da lista, então nunca fica desatualizado.
     const id = Number(localStorage.getItem('linkwork:sessao'));
     const encontrado = ler<Usuario>('usuarios').find((u) => u.id === id);
     this.usuario = encontrado ? encontrado : null;
   }
 
-  
+  /** Retorna a mensagem de erro ou null quando deu certo. */
   entrar(email: string, senha: string): string | null {
     const emailBusca = email.trim().toLowerCase();
     const usuarios = ler<Usuario>('usuarios');
@@ -72,7 +72,7 @@ export class AuthService {
     return this.listarUsuarios().find((u) => u.id === id);
   }
 
-  
+  /** Atualiza os dados do perfil e, se for o usuário logado, a sessão também. */
   atualizarPerfil(dados: Usuario): void {
     const usuarios = this.listarUsuarios();
     const posicao = usuarios.findIndex((u) => u.id === dados.id);
@@ -106,12 +106,15 @@ export class AuthService {
     this.atualizarTela();
   }
 
-
+  /**
+   * O projeto não usa zone.js, então o Angular só refaz os componentes que foram "avisados".
+   * O cabeçalho fica fora da tela que muda, por isso pedimos para refazer a tela toda.
+   */
   private atualizarTela(): void {
     this.app.tick();
   }
 
-  
+  /** Quem já tinha os usuários antigos salvos no navegador passa a ver os novos nomes. */
   private trocarNomesAntigos(): void {
     const usuarios = ler<Usuario>('usuarios');
     let mudou = false;

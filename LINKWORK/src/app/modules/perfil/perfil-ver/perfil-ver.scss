@@ -1,0 +1,78 @@
+.cabecalho-perfil {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  padding-top: 8px;
+}
+
+.identidade {
+  flex: 1;
+  min-width: 200px;
+
+  h1 {
+    margin: 0;
+  }
+
+  p {
+    margin: 2px 0 0;
+  }
+}
+
+.titulo {
+  font-weight: 600;
+}
+
+.numeros {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-top: 20px;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+    border-radius: 12px;
+    background: var(--lw-bg);
+  }
+
+  strong {
+    font-family: var(--lw-fonte-titulo);
+    font-size: 26px;
+    font-weight: 800;
+  }
+
+  span {
+    color: var(--lw-mute);
+    font-size: 13px;
+  }
+}
+
+.texto {
+  white-space: pre-line;
+}
+
+h3 {
+  margin: 20px 0 8px;
+  font-size: 16px;
+}
+
+.habilidades {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.avaliacao {
+  padding: 12px 0;
+
+  p {
+    margin: 4px 0 0;
+  }
+}
+
+.estrelas {
+  margin-right: 8px;
+  color: var(--lw-warn);
+}
