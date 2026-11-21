@@ -1,0 +1,94 @@
+<main class="pagina-larga">
+  <div class="topo">
+    <h1>{{ ehEmpresa ? 'Meus projetos' : 'Projetos disponíveis' }}</h1>
+    @if (ehEmpresa) {
+      <a mat-flat-button routerLink="/projetos/novo">
+        <mat-icon fontSet="material-symbols-outlined">add</mat-icon>
+        Novo projeto
+      </a>
+    }
+  </div>
+
+  <mat-card appearance="outlined">
+    <mat-card-content>
+      <div class="linha filtros">
+        <mat-form-field appearance="outline">
+          <mat-label>Buscar</mat-label>
+          <input matInput name="busca" [(ngModel)]="busca" (ngModelChange)="filtrar()" placeholder="Título ou descrição">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Área</mat-label>
+          <mat-select name="area" [(ngModel)]="area" (selectionChange)="filtrar()">
+            <mat-option value="">Todas</mat-option>
+            @for (a of areas; track a) {
+              <mat-option [value]="a">{{ a }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Status</mat-label>
+          <mat-select name="status" [(ngModel)]="status" (selectionChange)="filtrar()">
+            <mat-option value="">Todos</mat-option>
+            @for (s of statusOpcoes; track s[0]) {
+              <mat-option [value]="s[0]">{{ s[1] }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <button mat-button type="button" (click)="limparFiltros()">Limpar filtros</button>
+      </div>
+
+      <div class="tabela">
+        <table>
+          <thead>
+            <tr>
+              <th>Título</th>
+              <th>Área</th>
+              <th>Orçamento</th>
+              <th>Prazo</th>
+              <th>Status</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (p of visiveis; track p.id) {
+              <tr>
+                <td>{{ p.titulo }}</td>
+                <td>{{ p.area }}</td>
+                <td>{{ p.orcamento | currency: 'BRL' }}</td>
+                <td>{{ p.prazo | date: 'dd/MM/yyyy' }}</td>
+                <td><span class="selo selo-{{ p.status }}">{{ rotulo[p.status] }}</span></td>
+                <td class="celula-acoes">
+                  <a mat-icon-button [routerLink]="['/projetos', p.id]" aria-label="Ver detalhes" title="Ver detalhes">
+                    <mat-icon fontSet="material-symbols-outlined">visibility</mat-icon>
+                  </a>
+                  @if (ehEmpresa && p.status === 'ABERTO') {
+                    <a mat-icon-button [routerLink]="['/projetos', p.id, 'editar']" aria-label="Editar" title="Editar">
+                      <mat-icon fontSet="material-symbols-outlined">edit</mat-icon>
+                    </a>
+                    <button mat-icon-button type="button" (click)="excluir(p)" aria-label="Excluir" title="Excluir">
+                      <mat-icon fontSet="material-symbols-outlined">delete</mat-icon>
+                    </button>
+                  }
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td class="vazio" colspan="6">Nenhum projeto encontrado.</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="paginacao">
+        <span class="secundario">{{ filtrados.length }} projeto(s)</span>
+        <button mat-button type="button" (click)="anterior()" [disabled]="pagina === 0">Anterior</button>
+        <span>Página {{ pagina + 1 }} de {{ totalPaginas }}</span>
+        <button mat-button type="button" (click)="proxima()" [disabled]="pagina >= totalPaginas - 1">Próxima</button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</main>

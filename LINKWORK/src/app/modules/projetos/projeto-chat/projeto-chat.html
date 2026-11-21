@@ -1,0 +1,28 @@
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <mat-card-title>Conversa do projeto</mat-card-title>
+    <mat-card-subtitle>Fale com a outra parte sobre o andamento do trabalho</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="mensagens" id="lista-chat" aria-live="polite">
+      @for (m of mensagens; track m.id) {
+        <div class="balao" [class.minha]="m.autorId === meuId">
+          <span class="autor">{{ m.autorId === meuId ? 'Você' : nomeDe(m.autorId) }}</span>
+          <p>{{ m.texto }}</p>
+          <span class="hora">{{ m.data | date: 'dd/MM HH:mm' }}</span>
+        </div>
+      } @empty {
+        <p class="vazio">Nenhuma mensagem ainda. Comece a conversa.</p>
+      }
+    </div>
+
+    <form #form="ngForm" (ngSubmit)="enviar()" class="envio">
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Mensagem</mat-label>
+        <input matInput name="texto" autocomplete="off" maxlength="500" [(ngModel)]="texto">
+      </mat-form-field>
+      <button mat-flat-button type="submit" [disabled]="texto.trim() === ''">Enviar</button>
+    </form>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,69 @@
+<main class="pagina-media">
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>{{ editando ? 'Editar projeto' : 'Publicar projeto' }}</mat-card-title>
+      <mat-card-subtitle>Descreva o que você precisa contratar</mat-card-subtitle>
+    </mat-card-header>
+
+    <form #form="ngForm" (ngSubmit)="salvar()" novalidate>
+      <mat-card-content class="coluna">
+        <mat-form-field appearance="outline">
+          <mat-label>Título</mat-label>
+          <input matInput name="titulo" required maxlength="80" #tituloCtrl="ngModel" [(ngModel)]="titulo">
+          <mat-error>Informe o título</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Descrição</mat-label>
+          <textarea matInput name="descricao" rows="4" required minlength="20"
+                    #descCtrl="ngModel" [(ngModel)]="descricao"></textarea>
+          @if (descCtrl.hasError('required')) {
+            <mat-error>Informe a descrição</mat-error>
+          } @else if (descCtrl.hasError('minlength')) {
+            <mat-error>Descreva com pelo menos 20 caracteres</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="linha">
+          <mat-form-field appearance="outline">
+            <mat-label>Área</mat-label>
+            <mat-select name="area" required [(ngModel)]="area">
+              @for (a of areas; track a) {
+                <mat-option [value]="a">{{ a }}</mat-option>
+              }
+            </mat-select>
+            <mat-error>Escolha uma área</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Orçamento (R$)</mat-label>
+            <input matInput type="number" name="orcamento" required min="1" step="0.01"
+                   #orcCtrl="ngModel" [(ngModel)]="orcamento">
+            @if (orcCtrl.hasError('required')) {
+              <mat-error>Informe o orçamento</mat-error>
+            } @else if (orcCtrl.hasError('min')) {
+              <mat-error>O orçamento deve ser maior que zero</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Prazo de entrega</mat-label>
+            <input matInput type="date" name="prazo" required [min]="editando ? '' : hoje" [(ngModel)]="prazo">
+            <mat-error>Informe o prazo</mat-error>
+          </mat-form-field>
+        </div>
+
+        @if (erro) {
+          <p class="mensagem-erro" role="alert">{{ erro }}</p>
+        }
+      </mat-card-content>
+
+      <mat-card-actions class="acoes">
+        <button mat-button type="button" (click)="cancelar()">Cancelar</button>
+        <button mat-flat-button type="submit" [disabled]="form.invalid">
+          {{ editando ? 'Salvar alterações' : 'Publicar projeto' }}
+        </button>
+      </mat-card-actions>
+    </form>
+  </mat-card>
+</main>

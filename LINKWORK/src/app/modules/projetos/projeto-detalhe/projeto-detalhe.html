@@ -1,0 +1,292 @@
+@if (projeto) {
+  <main class="pagina-media">
+    <div class="topo">
+      <h1>{{ projeto.titulo }}</h1>
+      <span class="selo selo-{{ projeto.status }}">{{ rotuloStatus[projeto.status] }}</span>
+    </div>
+
+    <mat-card appearance="outlined">
+      <mat-card-content>
+        <p>{{ projeto.descricao }}</p>
+        <mat-divider />
+        <dl class="dados">
+          <div><dt>Área</dt><dd>{{ projeto.area }}</dd></div>
+          <div><dt>Orçamento</dt><dd>{{ projeto.orcamento | currency: 'BRL' }}</dd></div>
+          <div><dt>Prazo</dt><dd>{{ projeto.prazo | date: 'dd/MM/yyyy' }}</dd></div>
+          <div><dt>Empresa</dt><dd><a class="link" [routerLink]="['/perfil', projeto.empresaId]">{{ nomeDe(projeto.empresaId) }}</a></dd></div>
+          @if (projeto.freelancerId) {
+            <div><dt>Freelancer</dt><dd><a class="link" [routerLink]="['/perfil', projeto.freelancerId]">{{ nomeDe(projeto.freelancerId) }}</a></dd></div>
+          }
+          @if (projeto.valorAcordado) {
+            <div><dt>Valor acordado</dt><dd>{{ projeto.valorAcordado | currency: 'BRL' }}</dd></div>
+          }
+        </dl>
+      </mat-card-content>
+      <mat-card-actions class="acoes">
+        <button mat-button type="button" (click)="voltar()">Voltar</button>
+        @if (ehDono && projeto.status === 'ABERTO') {
+          <a mat-stroked-button [routerLink]="['/projetos', projeto.id, 'editar']">Editar</a>
+          <button mat-stroked-button type="button" (click)="excluirProjeto()">Excluir</button>
+        }
+      </mat-card-actions>
+    </mat-card>
+
+    <!-- ===== Empresa: propostas recebidas ===== -->
+    @if (ehDono) {
+      <mat-card appearance="outlined">
+        <mat-card-header>
+          <mat-card-title>Propostas recebidas</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          @for (p of propostas; track p.id) {
+            <div class="proposta">
+              <div>
+                <a class="link" [routerLink]="['/perfil', p.freelancerId]">{{ nomeDe(p.freelancerId) }}</a>
+                · {{ p.valor | currency: 'BRL' }} · {{ p.prazoDias }} dias
+                <span class="secundario">({{ p.status === 'PENDENTE' ? 'pendente' : p.status === 'ACEITA' ? 'aceita' : 'recusada' }})</span>
+                @if (p.mensagem) {
+                  <p class="secundario">{{ p.mensagem }}</p>
+                }
+              </div>
+              @if (projeto.status === 'ABERTO' && p.status === 'PENDENTE') {
+                <div class="linha">
+                  <button mat-flat-button type="button" (click)="aceitar(p)">Aceitar</button>
+                  <button mat-button type="button" (click)="recusar(p)">Recusar</button>
+                </div>
+              }
+            </div>
+            <mat-divider />
+          } @empty {
+            <p class="secundario">Nenhuma proposta recebida ainda.</p>
+          }
+        </mat-card-content>
+      </mat-card>
+    }
+
+    <!-- ===== Freelancer: enviar / gerenciar proposta ===== -->
+    @if (usuario.perfil === 'FREELANCER' && projeto.status === 'ABERTO') {
+      <mat-card appearance="outlined">
+        <mat-card-header>
+          <mat-card-title>{{ minhaProposta ? 'Sua proposta' : 'Enviar proposta' }}</mat-card-title>
+        </mat-card-header>
+
+        @if (minhaProposta && !editandoProposta) {
+          <mat-card-content>
+            <p>
+              {{ minhaProposta.valor | currency: 'BRL' }} · {{ minhaProposta.prazoDias }} dias
+              <span class="secundario">({{ minhaProposta.status === 'PENDENTE' ? 'pendente' : 'recusada' }})</span>
+            </p>
+            @if (minhaProposta.mensagem) {
+              <p class="secundario">{{ minhaProposta.mensagem }}</p>
+            }
+          </mat-card-content>
+          @if (minhaProposta.status === 'PENDENTE') {
+            <mat-card-actions class="acoes">
+              <button mat-button type="button" (click)="excluirProposta()">Excluir</button>
+              <button mat-stroked-button type="button" (click)="editarProposta()">Editar</button>
+            </mat-card-actions>
+          }
+        } @else {
+          <form #formProposta="ngForm" (ngSubmit)="enviarProposta()" novalidate>
+            <mat-card-content class="coluna">
+              <div class="linha">
+                <mat-form-field appearance="outline">
+                  <mat-label>Valor (R$)</mat-label>
+                  <input matInput type="number" name="valor" required min="1" step="0.01" [(ngModel)]="valor">
+                  <mat-error>Informe um valor maior que zero</mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                  <mat-label>Prazo (dias)</mat-label>
+                  <input matInput type="number" name="prazoDias" required min="1" step="1" [(ngModel)]="prazoDias">
+                  <mat-error>Informe o prazo em dias</mat-error>
+                </mat-form-field>
+              </div>
+              <mat-form-field appearance="outline">
+                <mat-label>Mensagem</mat-label>
+                <textarea matInput name="mensagem" rows="3" [(ngModel)]="mensagem"></textarea>
+              </mat-form-field>
+            </mat-card-content>
+            <mat-card-actions class="acoes">
+              @if (editandoProposta) {
+                <button mat-button type="button" (click)="cancelarEdicaoProposta()">Cancelar</button>
+              }
+              <button mat-flat-button type="submit" [disabled]="formProposta.invalid">
+                {{ editandoProposta ? 'Salvar proposta' : 'Enviar proposta' }}
+              </button>
+            </mat-card-actions>
+          </form>
+        }
+      </mat-card>
+    }
+
+    <!-- ===== Pagamento em custódia ===== -->
+    @if (ehDono && projeto.status === 'AGUARDANDO_PAGAMENTO') {
+      <mat-card appearance="outlined">
+        <mat-card-header>
+          <mat-card-title>Pagamento</mat-card-title>
+          <mat-card-subtitle>O valor fica em custódia até você aprovar a entrega</mat-card-subtitle>
+        </mat-card-header>
+        <form #formPagamento="ngForm" (ngSubmit)="pagar()" novalidate>
+          <mat-card-content class="coluna">
+            <p>Total: <strong>{{ projeto.valorAcordado | currency: 'BRL' }}</strong></p>
+            <mat-form-field appearance="outline">
+              <mat-label>Forma de pagamento</mat-label>
+              <mat-select name="metodo" required [(ngModel)]="metodo" (selectionChange)="aoEscolherMetodo()">
+                <mat-option value="PIX">Pix</mat-option>
+                <mat-option value="CARTAO">Cartão</mat-option>
+                <mat-option value="BOLETO">Boleto</mat-option>
+              </mat-select>
+              <mat-error>Escolha a forma de pagamento</mat-error>
+            </mat-form-field>
+
+            @if (metodo === 'PIX') {
+              <div class="pix">
+                @if (segundosPix > 0) {
+                  <svg class="qr" viewBox="0 0 25 25" width="200" height="200" role="img"
+                       aria-label="QR Code Pix fictício" fill="#000" shape-rendering="crispEdges">
+                    <rect width="25" height="25" fill="#fff" />
+                    @for (c of qrCelulas; track $index) {
+                      <rect [attr.x]="c.x" [attr.y]="c.y" width="1" height="1" />
+                    }
+                  </svg>
+                  <p>Este código expira em <strong [class.urgente]="segundosPix <= 60">{{ tempoRestante }}</strong></p>
+
+                  <div class="linha copia">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Pix copia e cola</mat-label>
+                      <input matInput readonly name="codigoPix" [value]="codigoPix">
+                    </mat-form-field>
+                    <button mat-stroked-button type="button" (click)="copiarCodigo()">Copiar</button>
+                  </div>
+                  <p class="secundario">QR Code fictício. Nenhum valor é cobrado.</p>
+                } @else {
+                  <p class="mensagem-erro" role="alert">O código expirou. Gere um novo código para pagar.</p>
+                  <button mat-stroked-button type="button" (click)="gerarQr()">Gerar novo código</button>
+                }
+              </div>
+            }
+          </mat-card-content>
+          <mat-card-actions class="acoes">
+            <button mat-flat-button type="submit"
+                    [disabled]="formPagamento.invalid || (metodo === 'PIX' && segundosPix <= 0)">
+              {{ metodo === 'PIX' ? 'Simular pagamento Pix' : 'Pagar e iniciar projeto' }}
+            </button>
+          </mat-card-actions>
+        </form>
+      </mat-card>
+    }
+
+    @if (ehContratado && projeto.status === 'AGUARDANDO_PAGAMENTO') {
+      <mat-card appearance="outlined">
+        <mat-card-content>
+          <p>Sua proposta foi aceita. Aguarde a empresa realizar o pagamento para iniciar o projeto.</p>
+        </mat-card-content>
+      </mat-card>
+    }
+
+    @if (pagamento) {
+      <mat-card appearance="outlined">
+        <mat-card-header>
+          <mat-card-title>Pagamento</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p>
+            {{ pagamento.valor | currency: 'BRL' }} via {{ rotuloMetodo[pagamento.metodo] }} ·
+            <strong>{{ pagamento.status === 'EM_CUSTODIA' ? 'em custódia' : 'liberado ao freelancer' }}</strong>
+          </p>
+        </mat-card-content>
+      </mat-card>
+    }
+
+    <!-- ===== Execução ===== -->
+    @if (ehContratado && projeto.status === 'EM_ANDAMENTO') {
+      <mat-card appearance="outlined">
+        <mat-card-header>
+          <mat-card-title>Entrega</mat-card-title>
+          <mat-card-subtitle>Quando terminar o trabalho, registre a entrega</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-actions class="acoes">
+          <button mat-flat-button type="button" (click)="entregar()">Marcar como entregue</button>
+        </mat-card-actions>
+      </mat-card>
+    }
+
+    @if (ehDono && projeto.status === 'ENTREGUE') {
+      <mat-card appearance="outlined">
+        <mat-card-header>
+          <mat-card-title>Aprovar entrega</mat-card-title>
+          <mat-card-subtitle>Ao aprovar, o pagamento é liberado ao freelancer</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-actions class="acoes">
+          <button mat-flat-button type="button" (click)="aprovar()">Aprovar e liberar pagamento</button>
+        </mat-card-actions>
+      </mat-card>
+    }
+
+    @if (ehContratado && projeto.status === 'ENTREGUE') {
+      <mat-card appearance="outlined">
+        <mat-card-content>
+          <p>Entrega registrada. Aguardando a aprovação da empresa.</p>
+        </mat-card-content>
+      </mat-card>
+    }
+
+    <!-- ===== Versões da entrega ===== -->
+    @if (projeto.freelancerId && (ehDono || ehContratado) && projeto.status !== 'AGUARDANDO_PAGAMENTO') {
+      <app-projeto-versoes [projetoId]="projeto.id" [status]="projeto.status" [podeRegistrar]="ehContratado" />
+    }
+
+    <!-- ===== Chat entre empresa e freelancer ===== -->
+    @if (projeto.freelancerId && (ehDono || ehContratado)) {
+      <app-projeto-chat [projetoId]="projeto.id" />
+    }
+
+    <!-- ===== Avaliação ===== -->
+    @if (podeAvaliar) {
+      <mat-card appearance="outlined">
+        <mat-card-header>
+          <mat-card-title>Avaliar {{ ehDono ? 'o freelancer' : 'a empresa' }}</mat-card-title>
+        </mat-card-header>
+        <form #formAvaliacao="ngForm" (ngSubmit)="avaliar()" novalidate>
+          <mat-card-content class="coluna">
+            <mat-form-field appearance="outline">
+              <mat-label>Nota</mat-label>
+              <mat-select name="nota" required [(ngModel)]="nota">
+                @for (n of notas; track n) {
+                  <mat-option [value]="n">{{ n }}</mat-option>
+                }
+              </mat-select>
+              <mat-error>Escolha uma nota de 1 a 5</mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Comentário</mat-label>
+              <textarea matInput name="comentario" rows="3" [(ngModel)]="comentario"></textarea>
+            </mat-form-field>
+          </mat-card-content>
+          <mat-card-actions class="acoes">
+            <button mat-flat-button type="submit" [disabled]="formAvaliacao.invalid">Enviar avaliação</button>
+          </mat-card-actions>
+        </form>
+      </mat-card>
+    }
+
+    @if (avaliacoesProjeto.length) {
+      <mat-card appearance="outlined">
+        <mat-card-header>
+          <mat-card-title>Avaliações</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          @for (a of avaliacoesProjeto; track a.id) {
+            <p>
+              <strong>{{ nomeDe(a.avaliadorId) }}</strong> avaliou {{ nomeDe(a.avaliadoId) }}:
+              {{ a.nota }}/5
+              @if (a.comentario) {
+                <span class="secundario"> — {{ a.comentario }}</span>
+              }
+            </p>
+          }
+        </mat-card-content>
+      </mat-card>
+    }
+  </main>
+}

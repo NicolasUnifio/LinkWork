@@ -1,0 +1,55 @@
+.mensagens {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 160px;
+  max-height: 320px;
+  overflow-y: auto;
+  padding: 12px 4px;
+}
+
+.balao {
+  align-self: flex-start;
+  max-width: 78%;
+  padding: 8px 14px;
+  border-radius: 16px;
+  background: var(--lw-soft);
+
+  p {
+    margin: 2px 0;
+    overflow-wrap: anywhere;
+  }
+}
+
+.balao.minha {
+  align-self: flex-end;
+  background: var(--lw-acc);
+  color: #fff;
+}
+
+.autor {
+  font-size: 12px;
+  font-weight: 700;
+  opacity: 0.8;
+}
+
+.hora {
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+.vazio {
+  margin: auto;
+  color: var(--lw-mute);
+}
+
+.envio {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+
+  mat-form-field {
+    flex: 1;
+  }
+}

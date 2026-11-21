@@ -1,0 +1,58 @@
+.filtros {
+  align-items: center;
+  padding-top: 16px;
+
+  mat-form-field {
+    flex: 1 1 200px;
+    width: auto;
+  }
+}
+
+.tabela {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  text-align: left;
+  padding: 12px 8px;
+  color: var(--lw-mute);
+  font-size: 13px;
+  border-bottom: 1px solid var(--lw-line);
+}
+
+td {
+  padding: 8px;
+  border-bottom: 1px solid var(--lw-line);
+}
+
+tbody tr:hover {
+  background: var(--lw-bg);
+}
+
+.celula-acoes {
+  white-space: nowrap;
+}
+
+.vazio {
+  padding: 24px;
+  text-align: center;
+  color: var(--lw-mute);
+}
+
+.paginacao {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 12px;
+
+  .secundario {
+    margin-right: auto;
+  }
+}

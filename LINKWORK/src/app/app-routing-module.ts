@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'perfil', pathMatch: 'full' },
+  { path: '', redirectTo: 'projetos', pathMatch: 'full' },
   {
     path: 'auth',
     loadChildren: () => import('./modules/auth/auth-module').then((m) => m.AuthModule),
@@ -11,7 +11,11 @@ const routes: Routes = [
     path: 'perfil',
     loadChildren: () => import('./modules/perfil/perfil-module').then((m) => m.PerfilModule),
   },
-  { path: '**', redirectTo: 'perfil' },
+  {
+    path: 'projetos',
+    loadChildren: () => import('./modules/projetos/projetos-module').then((m) => m.ProjetosModule),
+  },
+  { path: '**', redirectTo: 'projetos' },
 ];
 
 @NgModule({

@@ -1,0 +1,67 @@
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <mat-card-title>Versões da entrega</mat-card-title>
+    <mat-card-subtitle>Histórico do andamento do projeto</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="progresso">
+      <span>Progresso</span>
+      <strong>{{ progressoAtual }}%</strong>
+    </div>
+    <progress [value]="progressoAtual" max="100" aria-label="Progresso do projeto"></progress>
+
+    @if (podeNovaVersao) {
+      <form #form="ngForm" (ngSubmit)="registrar()" novalidate class="coluna">
+        <mat-form-field appearance="outline">
+          <mat-label>Nova versão</mat-label>
+          <input matInput name="resumo" required maxlength="60" placeholder="Resumo curto do que foi feito"
+                 [(ngModel)]="resumo">
+          <mat-error>Informe um resumo</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Anotações (opcional)</mat-label>
+          <textarea matInput name="notas" rows="2" [(ngModel)]="notas"></textarea>
+        </mat-form-field>
+
+        <label for="progresso">Progresso do projeto: <strong>{{ progresso }}%</strong></label>
+        <input id="progresso" type="range" name="progresso" [min]="progressoAtual" max="100" step="5"
+               [(ngModel)]="progresso">
+
+        @if (erro) {
+          <p class="mensagem-erro" role="alert">{{ erro }}</p>
+        }
+        <div class="acoes">
+          <button mat-flat-button type="submit">Registrar versão</button>
+        </div>
+      </form>
+    } @else if (podeRegistrar && status !== 'EM_ANDAMENTO') {
+      <p class="secundario">Projeto entregue. O histórico está fechado para novas versões.</p>
+    } @else if (!podeRegistrar && status === 'EM_ANDAMENTO') {
+      <p class="secundario">Só o freelancer registra versões. Você acompanha o histórico abaixo.</p>
+    }
+
+    <ol class="historico" aria-label="Histórico de versões">
+      @for (v of recentes; track v.id) {
+        <li>
+          <div class="cabecalho-versao">
+            <span class="numero">v0.{{ v.numero }}</span>
+            <strong>{{ v.resumo }}</strong>
+          </div>
+          @if (v.notas) {
+            <p>{{ v.notas }}</p>
+          }
+          <span class="secundario">
+            {{ nomeDe(v.autorId) }}, {{ v.data | date: 'dd/MM HH:mm' }}
+            @if (v.incremento > 0) {
+              , +{{ v.incremento }}% de progresso
+            }
+          </span>
+        </li>
+      } @empty {
+        <li class="secundario">Nenhuma versão registrada ainda.</li>
+      }
+    </ol>
+  </mat-card-content>
+</mat-card>
