@@ -6,8 +6,8 @@ Plataforma web que conecta **freelancers** e **empresas** que desejam contratar 
 
 ## Links
 
-- Aplicação publicada: _<preencher com o link da publicação>_
-- Repositório: _<preencher com o link do Git>_
+- Aplicação publicada: https://chimerical-cassata-a8c386.netlify.app/auth/login
+- Repositório: https://github.com/NicolasUnifio/LinkWork.git
 
 ## Acesso para teste
 
@@ -15,6 +15,8 @@ Plataforma web que conecta **freelancers** e **empresas** que desejam contratar 
 |---|---|---|
 | Empresa | empresa@linkwork.com | 123456 |
 | Freelancer | freelancer@linkwork.com | 123456 |
+
+APENAS O PIX ESTA FUNCIONANDO COMO METODO DE PAGAMENTO.
 
 Também é possível criar contas novas na tela de cadastro.
 
