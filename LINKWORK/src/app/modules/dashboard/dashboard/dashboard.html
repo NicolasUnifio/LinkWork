@@ -1,0 +1,34 @@
+<main class="pagina-larga">
+  <section class="boas-vindas">
+    <div>
+      <h1>Olá, {{ nome }}</h1>
+      <p>{{ ehEmpresa ? 'Acompanhe seus projetos e pagamentos em custódia.' : 'Acompanhe suas propostas e seus ganhos.' }}</p>
+    </div>
+    <div class="linha">
+      @if (ehEmpresa) {
+        <a mat-flat-button routerLink="/projetos/novo">Publicar projeto</a>
+      }
+      <a mat-stroked-button routerLink="/projetos">Ver projetos</a>
+    </div>
+  </section>
+
+  <section class="indicadores" aria-label="Indicadores">
+    @for (item of indicadores; track item.rotulo) {
+      <mat-card appearance="outlined">
+        <mat-card-content>
+          <span class="icone">
+            <mat-icon fontSet="material-symbols-outlined">{{ item.icone }}</mat-icon>
+          </span>
+          <p class="rotulo">{{ item.rotulo }}</p>
+          <p class="valor">
+            @if (item.tipo === 'moeda') {
+              {{ item.valor | currency: 'BRL' }}
+            } @else {
+              {{ item.valor }}
+            }
+          </p>
+        </mat-card-content>
+      </mat-card>
+    }
+  </section>
+</main>

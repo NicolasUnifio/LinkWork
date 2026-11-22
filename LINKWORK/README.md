@@ -1,59 +1,35 @@
-# LINKWORK
+# LinkWork
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.2.3.
+Plataforma web que conecta **freelancers** e **empresas** que desejam contratar serviços. Projeto Integrador – Unifio, grupo Alpha.
 
-## Development server
+**Autores:** Nicolas Rafael Domiciano Miguel · Kauan Teixeira Poma
 
-To start a local development server, run:
+## Links
 
-```bash
-ng serve
-```
+- Aplicação publicada: _<preencher com o link da publicação>_
+- Repositório: _<preencher com o link do Git>_
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Acesso para teste
 
-## Code scaffolding
+| Perfil | E-mail | Senha |
+|---|---|---|
+| Empresa | empresa@linkwork.com | 123456 |
+| Freelancer | freelancer@linkwork.com | 123456 |
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Também é possível criar contas novas na tela de cadastro.
 
-```bash
-ng generate component component-name
-```
+## Funcionalidades
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+- Cadastro, login e recuperação de senha, com dois perfis (Empresa e Freelancer).
+- Perfil editável (com foto) e perfil público; diretório "Rede" com busca e filtros.
+- CRUD de projetos e de propostas, com busca, filtros e paginação.
+- Fluxo principal: publicar projeto → enviar proposta → aceitar → pagar (valor em custódia; Pix com QR Code fictício de 5 minutos) → registrar versões → entregar → aprovar e liberar pagamento → avaliar.
+- Chat entre a Empresa e o Freelancer contratado de cada projeto.
+- Painel com 4 indicadores calculados a partir dos dados, por perfil.
 
-```bash
-ng generate --help
-```
+Angular com NgModules (`standalone: false`) e carregamento tardio (lazy loading) das rotas, Angular Material, TypeScript, HTML e CSS/SCSS. SSR/SSG desativados.
 
-## Building
 
-To build the project run:
+## Documentação
 
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- ERS (requisitos), diagrama de classes e manual de acesso e uso, entregues junto com o projeto.
